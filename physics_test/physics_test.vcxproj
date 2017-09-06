@@ -112,6 +112,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="system_test.cpp" />
     <ClCompile Include="vec2_test.cpp" />
   </ItemGroup>
   <ItemGroup>
