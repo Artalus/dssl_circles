@@ -47,7 +47,7 @@ namespace test_vec2 {
 		}
 	}
 
-	SCENARIO("methods") {
+	SCENARIO("length") {
 		GIVEN("default constructed vector") {
 			vec2 v{};
 			SECTION("length is 0")
@@ -59,6 +59,38 @@ namespace test_vec2 {
 				REQUIRE(v1.length() == Approx(1));
 				REQUIRE(v2.length() == Approx(1));
 				REQUIRE(v3.length() == Approx(5));
+			}
+		}
+	}
+
+	SCENARIO("from two points") {
+		GIVEN("2 zero vectors") {
+			vec2 a{}, b{};
+			SECTION("result is zero") {
+				auto r = vec2::from_two_points(a,b);
+				REQUIRE(r.x() == Approx(0));
+				REQUIRE(r.y() == Approx(0));
+			}
+		}
+		GIVEN("2 same vectors") {
+			vec2 a{10,12}, b{a};
+			SECTION("result is zero") {
+				auto r = vec2::from_two_points(a,b);
+				REQUIRE(r.x() == Approx(0));
+				REQUIRE(r.y() == Approx(0));
+			}
+		}
+		GIVEN("zero and some vectors") {
+			vec2 a{0,0}, b{3,5};
+			SECTION("result is second") {
+				auto r = vec2::from_two_points(a,b);
+				REQUIRE(r.x() == Approx(b.x()));
+				REQUIRE(r.y() == Approx(b.y()));
+			}
+			SECTION("backwards is -second") {
+				auto r = vec2::from_two_points(b,a);
+				REQUIRE(r.x() == Approx(-b.x()));
+				REQUIRE(r.y() == Approx(-b.y()));
 			}
 		}
 	}
