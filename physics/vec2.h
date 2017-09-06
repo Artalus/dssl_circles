@@ -6,7 +6,7 @@ class vec2 {
 public:
 	vec2() = default;
 
-	vec2(float x, float y)
+	vec2(double x, double y)
 		: x_(x)
 		, y_(y) {
 	}
