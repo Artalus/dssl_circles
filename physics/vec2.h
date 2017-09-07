@@ -29,7 +29,7 @@ public:
 
 	double length() const;
 
-	static vec2 from_two_points(vec2& a, vec2& b);
+	static vec2 from_two_points(const vec2& a, const vec2& b);
 
 private:
 	double x_ = 0., y_ = 0.;
