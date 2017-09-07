@@ -8,6 +8,37 @@ using clk = std::chrono::system_clock;
 using namespace std::chrono_literals;
 using namespace std::chrono;
 
+SCENARIO("id progression") {
+	GIVEN("empty system") {
+		phys_system s;
+		const vec2 p1{1,1}, p2{22,22}, p3{333,333};
+
+		WHEN("add 3 balls") {
+			auto i1 = s.add(p1),
+				i2 = s.add(p2),
+				i3 = s.add(p3);
+			THEN("i1 < i2 < i3") {
+				REQUIRE(i1 < i2);
+				REQUIRE(i2 < i3);
+			}
+		}
+		
+		WHEN("add 3 balls one by one and immediately get them") {
+			auto i1 = s.add(p1);
+			auto b1 = s.get(i1);
+			auto i2 = s.add(p2);
+			auto b2 = s.get(i2);
+			auto i3 = s.add(p3);
+			auto b3 = s.get(i3);
+			THEN("they are on same positions as originally") {
+				REQUIRE(b1.pos() == p1);
+				REQUIRE(b2.pos() == p2);
+				REQUIRE(b3.pos() == p3);
+			}
+		}
+	}
+}
+
 SCENARIO("single ball system") {
 	GIVEN("empty system") {
 		phys_system system;
