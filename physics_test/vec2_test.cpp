@@ -116,4 +116,30 @@ namespace test_vec2 {
 			}
 		}
 	}
+
+	SCENARIO("addition") {
+		GIVEN("zero and 2 some vectors") {
+			vec2 z{}, x{1,3}, y{9,5};
+			WHEN("zero + zero") {
+				THEN("result is zero")
+					REQUIRE((z+z) == z);
+			}
+			WHEN("zero += zero") {
+				auto r = z;
+				r+=z;
+				THEN("result is zero")
+					REQUIRE(r == z);
+			}
+			WHEN("zero + x") {
+				THEN("result is x")
+					REQUIRE((z+x) == x);
+			}
+			WHEN("zero += x") {
+				auto r = z;
+				r+=x;
+				THEN("result is x")
+					REQUIRE(r == x);
+			}
+		}
+	}
 }
