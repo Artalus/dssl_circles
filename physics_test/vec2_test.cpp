@@ -47,7 +47,7 @@ namespace test_vec2 {
 		}
 
 		GIVEN("vector copy constructed from another ") {
-			const vec2 v2(7, 8);
+			const vec2 v2{7, 8};
 			vec2 v(v2);
 			SECTION("both coordinates are equal to another ones") {
 				REQUIRE(v.x() == Approx(v2.x()));
@@ -82,7 +82,7 @@ namespace test_vec2 {
 		
 		GIVEN("negative vector")
 			SECTION("result has positive coordinates")
-				REQUIRE( -vec2(-3,-1) == vec2(3,1));
+				REQUIRE( -vec2(-3.1,-1.2) == vec2(3.1,1.2));
 	}
 
 	SCENARIO("from two points") {
@@ -93,13 +93,13 @@ namespace test_vec2 {
 			}
 		}
 		GIVEN("2 same vectors") {
-			vec2 a{10,12}, b{a};
+			vec2 a{10.5,12.5}, b{a};
 			SECTION("result is zero") {
 				REQUIRE(vec2::from_two_points(a,b) == vec2(0,0));
 			}
 		}
 		GIVEN("zero and x") {
-			vec2 z{0,0}, x{3,5};
+			vec2 z{0,0}, x{3.3,5.5};
 			SECTION("result is x") {
 				REQUIRE(vec2::from_two_points(z,x) == x);
 			}
@@ -111,7 +111,7 @@ namespace test_vec2 {
 
 	SCENARIO("addition") {
 		GIVEN("zero and 2 some vectors") {
-			vec2 z{}, x{1,3}, y{9,5};
+			vec2 z{}, x{1.1,3.3}, y{9,5};
 			WHEN("zero + zero") {
 				THEN("result is zero")
 					REQUIRE((z+z) == z);
@@ -131,6 +131,11 @@ namespace test_vec2 {
 				r+=x;
 				THEN("result is x")
 					REQUIRE(r == x);
+			}
+			WHEN("x + y") {
+				vec2 r{x.x()+y.x(), x.y() + y.y()};
+				THEN("coordinates are summed")
+					REQUIRE((x+y) == r);
 			}
 		}
 	}
