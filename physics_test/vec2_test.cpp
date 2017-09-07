@@ -2,6 +2,15 @@
 #include "../physics/vec2.h"
 
 
+bool operator==(const vec2& lhs, const vec2 &rhs) {
+	return lhs.x() == Approx(rhs.x())
+		&& lhs.y() == Approx(rhs.y());
+}
+
+std::ostream& operator<<(std::ostream& s, const vec2 &v) {
+	return s << "vec2{" << v.x() << " , " << v.y() << "}";
+}
+
 namespace test_vec2 {
 	SCENARIO( "assignment" ) {
 		GIVEN("empty vector") {
