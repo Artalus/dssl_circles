@@ -1,5 +1,4 @@
 #pragma once
-#include <cmath>
 
 
 class vec2 {
@@ -25,6 +24,21 @@ public:
 
 	void y(double v) {
 		y_ = v;
+	}
+
+	vec2& operator+=(const vec2 &rhs) {
+		x_ += rhs.x_;
+		y_ += rhs.y_;
+		return *this;
+	}
+
+	friend vec2 operator+(const vec2 &lhs, const vec2 &rhs) {
+		vec2 r{lhs};
+		return r += rhs;
+	}
+
+	vec2 operator-() const {
+		return {-x_, -y_};
 	}
 
 	double length() const;

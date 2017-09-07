@@ -1,5 +1,7 @@
 #include "vec2.h"
 
+#include <cmath>
+
 double vec2::length() const {
 	return sqrt(x_ * x_ + y_ * y_);
 }
