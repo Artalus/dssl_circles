@@ -120,9 +120,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ball.h" />
+    <ClInclude Include="phys_system.h" />
     <ClInclude Include="vec2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ball.cpp" />
+    <ClCompile Include="phys_system.cpp" />
     <ClCompile Include="vec2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

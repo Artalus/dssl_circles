@@ -18,9 +18,21 @@
     <ClInclude Include="vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="phys_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ball.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vec2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="phys_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
