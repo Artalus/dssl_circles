@@ -46,15 +46,14 @@ SCENARIO("single ball system") {
 			REQUIRE(system.size() == 0);
 
 		WHEN("add a ball") {
-			const ball original{{5.2, 5.3}};
-			const auto i = system.add(original);
+			const vec2 original_pos{5.2, 5.3};
+			const auto i = system.add(original_pos);
 			THEN("size increased")
 				REQUIRE(system.size() == 1);
 			WHEN("get ball by id") {
 				const auto b = system.get(i);
 				THEN("it is same ball") {
-					REQUIRE(b.pos() == original.pos());
-					REQUIRE(&b == &original);
+					REQUIRE(b.pos() == original_pos);
 				}
 			}
 			
@@ -65,7 +64,7 @@ SCENARIO("single ball system") {
 					system.simulate(delta);
 				}
 				THEN("ball is in same position")
-					REQUIRE(system.get(i).pos() == vec2(0,0));
+					REQUIRE(system.get(i).pos() == original_pos);
 			}
 		}
 	}
@@ -78,9 +77,12 @@ SCENARIO("three-ball-line system") {
 			REQUIRE(system.size() == 0);
 
 		WHEN("add line of three balls") {
-			const auto b1 = system.add(ball{{-10, 0}}),
-				bm = system.add(ball{{0, 0}}),
-				b2 = system.add(ball{{10, 0}});
+			const vec2 original_1{-10,0},
+				original_m{0,0},
+				original_2{10,0};
+			const auto b1 = system.add(original_1),
+				bm = system.add(original_m),
+				b2 = system.add(original_2);
 			THEN("their ids differ") {
 				REQUIRE(b1 != b2);
 				REQUIRE(b1 != bm);
@@ -95,17 +97,17 @@ SCENARIO("three-ball-line system") {
 					system.simulate(delta);
 				}
 				THEN("middle ball is in same position")
-					REQUIRE(system.get(bm).pos() == vec2(0,0));
-				THEN("side ones are closer for same distance") {
+					REQUIRE(system.get(bm).pos() == original_m);
+				THEN("side ones have moved for same distance") {
 					const auto b1_pos = system.get(b1).pos(),
 						b2_pos = system.get(b2).pos();
-					auto b1_dist = vec2_from_two_points({-10,0}, b1_pos),
-						b2_dist = vec2_from_two_points(b2_pos, {10,0});
-					REQUIRE(b1_dist.length() == b2_dist.length());
+					auto b1_vec = vec2_from_two_points(original_1, b1_pos),
+						b2_vec = vec2_from_two_points(original_2, {10,0});
+					REQUIRE(b1_vec.length() == b2_vec.length());
 					SECTION("and are on same line")
-						REQUIRE(b1_dist == b2_dist);
+						REQUIRE(b1_vec == b2_vec);
 					SECTION("and the distance is positive")
-						REQUIRE(glm::length(b1_dist) > 0);
+						REQUIRE(glm::length(b1_vec) > 0);
 				}
 			}
 		}
