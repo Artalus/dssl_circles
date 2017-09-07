@@ -89,30 +89,22 @@ namespace test_vec2 {
 		GIVEN("2 zero vectors") {
 			vec2 a{}, b{};
 			SECTION("result is zero") {
-				auto r = vec2::from_two_points(a,b);
-				REQUIRE(r.x() == Approx(0));
-				REQUIRE(r.y() == Approx(0));
+				REQUIRE(vec2::from_two_points(a,b) == vec2(0,0));
 			}
 		}
 		GIVEN("2 same vectors") {
 			vec2 a{10,12}, b{a};
 			SECTION("result is zero") {
-				auto r = vec2::from_two_points(a,b);
-				REQUIRE(r.x() == Approx(0));
-				REQUIRE(r.y() == Approx(0));
+				REQUIRE(vec2::from_two_points(a,b) == vec2(0,0));
 			}
 		}
-		GIVEN("zero and some vectors") {
-			vec2 a{0,0}, b{3,5};
-			SECTION("result is second") {
-				auto r = vec2::from_two_points(a,b);
-				REQUIRE(r.x() == Approx(b.x()));
-				REQUIRE(r.y() == Approx(b.y()));
+		GIVEN("zero and x") {
+			vec2 z{0,0}, x{3,5};
+			SECTION("result is x") {
+				REQUIRE(vec2::from_two_points(z,x) == x);
 			}
-			SECTION("backwards is -second") {
-				auto r = vec2::from_two_points(b,a);
-				REQUIRE(r.x() == Approx(-b.x()));
-				REQUIRE(r.y() == Approx(-b.y()));
+			SECTION("backwards is -x") {
+				REQUIRE(vec2::from_two_points(x,z) == -x);
 			}
 		}
 	}
