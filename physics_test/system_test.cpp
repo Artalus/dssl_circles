@@ -22,7 +22,7 @@ SCENARIO("id progression") {
 				REQUIRE(i2 < i3);
 			}
 		}
-		
+
 		WHEN("add 3 balls one by one and immediately get them") {
 			auto i1 = s.add(p1);
 			auto b1 = s.get(i1);
@@ -56,7 +56,7 @@ SCENARIO("single ball system") {
 					REQUIRE(b.pos() == original_pos);
 				}
 			}
-			
+
 			AND_WHEN("simulate for a second at 60fps") {
 				constexpr auto frames = 60;
 				constexpr milliseconds delta = 1s/frames;

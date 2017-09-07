@@ -79,7 +79,7 @@ namespace test_vec2 {
 		GIVEN("positive vector")
 			SECTION("result has negative coordinates")
 				REQUIRE( -vec2(1,4) == vec2(-1,-4));
-		
+
 		GIVEN("negative vector")
 			SECTION("result has positive coordinates")
 				REQUIRE( -vec2(-3.1,-1.2) == vec2(3.1,1.2));

@@ -24,4 +24,3 @@ public:
 private:
 	vec2 pos_;
 };
-
