@@ -1,6 +1,9 @@
 #pragma once
+#include <glm/glm.hpp>
 
-
+using vec2 = glm::vec2;
+vec2 vec2_from_two_points(const vec2& a, const vec2& b);
+/*
 class vec2 {
 public:
 	vec2() = default;
@@ -48,3 +51,4 @@ public:
 private:
 	double x_ = 0., y_ = 0.;
 };
+*/

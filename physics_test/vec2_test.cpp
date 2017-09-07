@@ -2,37 +2,37 @@
 #include "../physics/vec2.h"
 
 
-bool operator==(const vec2& lhs, const vec2 &rhs) {
+/*bool operator==(const vec2& lhs, const vec2 &rhs) {
 	return lhs.x() == Approx(rhs.x())
 		&& lhs.y() == Approx(rhs.y());
-}
+}*/
 
 std::ostream& operator<<(std::ostream& s, const vec2 &v) {
-	return s << "vec2{" << v.x() << " , " << v.y() << "}";
+	return s << "vec2{" << v.x << " , " << v.y << "}";
 }
 
 namespace test_vec2 {
 	SCENARIO( "assignment" ) {
 		GIVEN("empty vector") {
 			vec2 v;
-			REQUIRE(v.x() == 0);
-			REQUIRE(v.y() == 0);
+			REQUIRE(v.x == 0);
+			REQUIRE(v.y == 0);
 
 			WHEN("assign x") {
-				v.x(8);
+				v.x = 8;
 				THEN("only x changed") {
-					REQUIRE(v.x() > 0);
-					REQUIRE(v.x() == Approx(8));
-					REQUIRE(v.y() == Approx(0));
+					REQUIRE(v.x> 0);
+					REQUIRE(v.x== Approx(8));
+					REQUIRE(v.y== Approx(0));
 				}
 			}
 
 			WHEN("assign y") {
-				v.y(-2.1);
+				v.y = -2.1;
 				THEN("only y changed") {
-					REQUIRE(v.y() < 0);
-					REQUIRE(v.y() == Approx(-2.1));
-					REQUIRE(v.x() == Approx(0));
+					REQUIRE(v.y < 0);
+					REQUIRE(v.y == Approx(-2.1));
+					REQUIRE(v.x == Approx(0));
 				}
 			}
 
@@ -40,8 +40,8 @@ namespace test_vec2 {
 				const vec2 v2{5,6};
 				v = v2;
 				THEN("both coordinates changed") {
-					REQUIRE(v.x() == Approx(v2.x()));
-					REQUIRE(v.y() == Approx(v2.y()));
+					REQUIRE(v.x == Approx(v2.x));
+					REQUIRE(v.y == Approx(v2.y));
 				}
 			}
 		}
@@ -50,8 +50,8 @@ namespace test_vec2 {
 			const vec2 v2{7, 8};
 			vec2 v(v2);
 			SECTION("both coordinates are equal to another ones") {
-				REQUIRE(v.x() == Approx(v2.x()));
-				REQUIRE(v.y() == Approx(v2.y()));
+				REQUIRE(v.x == Approx(v2.x));
+				REQUIRE(v.y == Approx(v2.y));
 			}
 		}
 	}
@@ -89,22 +89,22 @@ namespace test_vec2 {
 		GIVEN("2 zero vectors") {
 			vec2 a{}, b{};
 			SECTION("result is zero") {
-				REQUIRE(vec2::from_two_points(a,b) == vec2(0,0));
+				REQUIRE(vec2_from_two_points(a,b) == vec2(0,0));
 			}
 		}
 		GIVEN("2 same vectors") {
 			vec2 a{10.5,12.5}, b{a};
 			SECTION("result is zero") {
-				REQUIRE(vec2::from_two_points(a,b) == vec2(0,0));
+				REQUIRE(vec2_from_two_points(a,b) == vec2(0,0));
 			}
 		}
 		GIVEN("zero and x") {
 			vec2 z{0,0}, x{3.3,5.5};
 			SECTION("result is x") {
-				REQUIRE(vec2::from_two_points(z,x) == x);
+				REQUIRE(vec2_from_two_points(z,x) == x);
 			}
 			SECTION("backwards is -x") {
-				REQUIRE(vec2::from_two_points(x,z) == -x);
+				REQUIRE(vec2_from_two_points(x,z) == -x);
 			}
 		}
 	}
@@ -133,7 +133,7 @@ namespace test_vec2 {
 					REQUIRE(r == x);
 			}
 			WHEN("x + y") {
-				vec2 r{x.x()+y.x(), x.y() + y.y()};
+				vec2 r{x.x+y.x, x.y + y.y};
 				THEN("coordinates are summed")
 					REQUIRE((x+y) == r);
 			}
