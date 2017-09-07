@@ -113,12 +113,7 @@
   <ItemGroup>
     <ClCompile Include="ball_test.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="system_test.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="system_test.cpp" />
     <ClCompile Include="vec2_test.cpp" />
   </ItemGroup>
   <ItemGroup>
