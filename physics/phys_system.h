@@ -26,7 +26,7 @@ class phys_system
 		ball_wrapper& operator=(const ball_wrapper&) = delete;
 		ball_wrapper& operator=(ball_wrapper&&) = default;
 
-		const ball& get() const {
+		ball& get() const {
 			return *b_;
 		}
 		bool operator<(const ball_wrapper &rhs) const {
