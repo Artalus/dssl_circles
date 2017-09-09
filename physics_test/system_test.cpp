@@ -3,6 +3,7 @@
 #include "../physics/phys_system.h"
 #include "../physics/vec2.h"
 #include "../physics/ball.h"
+#include <glm/gtx/vector_angle.hpp>
 
 using clk = std::chrono::system_clock;
 using namespace std::chrono_literals;
@@ -102,10 +103,10 @@ SCENARIO("three-ball-line system") {
 					const auto b1_pos = system.get(b1).pos(),
 						b2_pos = system.get(b2).pos();
 					auto b1_vec = vec2_from_two_points(original_1, b1_pos),
-						b2_vec = vec2_from_two_points(original_2, {10,0});
+						b2_vec = -vec2_from_two_points(original_2, b2_pos);
 					REQUIRE(b1_vec.length() == b2_vec.length());
 					SECTION("and are on same line")
-						REQUIRE(b1_vec == b2_vec);
+						REQUIRE(glm::angle(b1_vec, b2_vec) == Approx(0));
 					SECTION("and the distance is positive")
 						REQUIRE(glm::length(b1_vec) > 0);
 				}
