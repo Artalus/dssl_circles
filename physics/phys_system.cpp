@@ -30,14 +30,33 @@ void phys_system::simulate(fmilliseconds delta) {
 	apply_forces(calc_forces(), delta);
 }
 
-const ball& phys_system::get(uint64_t id) {
+const ball& phys_system::get(uint64_t id) const {
 	const auto it = lower_bound(cbegin(balls_), cend(balls_), id,
 		[](auto &&lhs, auto rhs) {
 		return lhs.id < rhs;
 	});
-	if (it == end(balls_))
+	if (it == cend(balls_))
 		throw std::runtime_error("couldn't find ball with id " + std::to_string(id));
 	return it->get();
+}
+
+const ball & phys_system::get_locked() const {
+	assert(locked_id_.has_value() && "no ball was locked in system");
+	return get(locked_id_.value());
+}
+
+void phys_system::unlock() {
+	locked_id_.reset();
+}
+
+void phys_system::lock(const vec2 &pos) {
+	assert(!locked_id_.has_value() && "cannot lock a ball when another is already locked");
+
+	const auto target = find_in_pos(pos);
+	if (target == end(balls_))
+		return;
+
+	locked_id_ = target->id;
 }
 
 void phys_system::apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> &forces,
@@ -55,6 +74,7 @@ void phys_system::apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> 
 
 vec2 phys_system::calc_force_on(const ball &b, const uint64_t id) {
 	vec2 force;
+
 	const vec2 pos = b.pos();
 	for (auto &&bw : balls_)
 		if (bw.id != id) {
@@ -68,6 +88,8 @@ std::vector<std::tuple<phys_system::bw_iterator, vec2>> phys_system::calc_forces
 	result.reserve(size());
 
 	for ( auto it = cbegin(balls_); it != cend(balls_); ++it ) {
+		if (locked_id_.has_value() && it->id == locked_id_)
+			continue;
 		result.emplace_back(make_tuple(it, calc_force_on(it->get(), it->id)));
 	}
 

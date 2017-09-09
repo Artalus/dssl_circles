@@ -2,17 +2,18 @@
 #include <chrono>
 #include <memory>
 #include <vector>
+#include <tuple>
+#include <optional>
 
 #include "ball.h"
-#include <chrono>
-#include <tuple>
-#include <vector>
 
 using fmilliseconds = std::chrono::duration<float, std::milli>;
 
 class phys_system
 {
 	class ball_wrapper {
+		friend phys_system;
+
 		static uint64_t guid_;
 		std::unique_ptr<ball> b_;
 	public:
@@ -47,10 +48,14 @@ public:
 
 	uint64_t add(const vec2 &pos);
 	void remove(const vec2 &pos);
-
 	size_t size() const;
+
 	void simulate(fmilliseconds delta);
-	const ball& get(uint64_t bm);
+
+	const ball& get(uint64_t bm) const;
+	const ball& get_locked() const;
+	void unlock();
+	void lock(const vec2 &pos);
 
 private:
 	using bw_iterator = decltype(balls_.cbegin());
@@ -60,4 +65,6 @@ private:
 	std::vector<std::tuple<bw_iterator, vec2>> calc_forces();
 
 	bw_iterator find_in_pos(const vec2 &pos) const;
+
+	std::optional<decltype(ball_wrapper::guid_)> locked_id_ = std::nullopt;
 };
