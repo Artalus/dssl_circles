@@ -21,6 +21,12 @@ public:
 	void move(const vec2 &dir) {
 		pos_ += dir;
 	}
+
+	bool is_point_inside(const vec2& p) const {
+		return glm::length(pos_ - p) <= radius;
+	}
+
 private:
 	vec2 pos_;
+	static const float radius;
 };

@@ -37,4 +37,26 @@ namespace ball_test {
 				REQUIRE(b1.pos() == b2.pos());
 		}
 	}
+
+	SCENARIO("is point inside") {
+		const vec2 pos{10,10}, y{0,0.5}, x{0.5,0};
+		GIVEN("a ball at 10;10") {
+			const ball b{pos};
+
+			SECTION("its center is inside")
+				REQUIRE(b.is_point_inside(pos));
+			SECTION("its radius/2 offsets are inside") {
+				REQUIRE(b.is_point_inside(pos+x));
+				REQUIRE(b.is_point_inside(pos-x));
+				REQUIRE(b.is_point_inside(pos+y));
+				REQUIRE(b.is_point_inside(pos-y));
+			}
+			SECTION("its radius*3 is outside") {
+				REQUIRE_FALSE(b.is_point_inside(pos+3.f*x));
+				REQUIRE_FALSE(b.is_point_inside(pos-3.f*x));
+				REQUIRE_FALSE(b.is_point_inside(pos+3.f*y));
+				REQUIRE_FALSE(b.is_point_inside(pos-3.f*y));
+			}
+		}
+	}
 }
