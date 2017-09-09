@@ -77,6 +77,13 @@ std::vector<std::tuple<phys_system::bw_iterator, vec2>> phys_system::calc_forces
 uint64_t phys_system::ball_wrapper::guid_ = 1;
 
 
+void phys_system::remove(const vec2 &pos) {
+	auto target = find_if(begin(balls_), end(balls_), [&pos](const ball_wrapper& bw)
+		{ return bw.get().is_point_inside(pos); }
+	);
 
+	if (target == end(balls_))
+		return;
 
-//TEST_CASE("calc_force")
+	balls_.erase(target);
+}
