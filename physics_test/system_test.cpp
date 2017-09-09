@@ -9,6 +9,11 @@ using clk = std::chrono::system_clock;
 using namespace std::chrono_literals;
 using namespace std::chrono;
 
+
+constexpr auto frames = 60;
+constexpr auto delta = fmilliseconds(1s)/frames;
+
+
 SCENARIO("id progression") {
 	GIVEN("empty system") {
 		phys_system s;
@@ -59,8 +64,6 @@ SCENARIO("single ball system") {
 			}
 
 			AND_WHEN("simulate for a second at 60fps") {
-				constexpr auto frames = 60;
-				constexpr milliseconds delta = 1s/frames;
 				for (int i = 0; i < frames; ++i) {
 					system.simulate(delta);
 				}
@@ -92,8 +95,6 @@ SCENARIO("three-ball-line system") {
 			THEN("size increased")
 				REQUIRE(system.size() == 3);
 			AND_WHEN("simulate for a second at 60fps") {
-				constexpr auto frames = 60;
-				constexpr auto delta = fmilliseconds(1s)/frames;
 				for (int i = 0; i < frames; ++i) {
 					system.simulate(delta);
 				}
