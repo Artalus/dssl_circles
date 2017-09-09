@@ -165,3 +165,35 @@ SCENARIO("removing balls from a system") {
 		}
 	}
 }
+
+SCENARIO("locking a ball") {
+	phys_system s;
+	vec2 m_pos{0,0}, l_pos{100,0};
+	auto original_dist = distance(l_pos, m_pos);
+	auto moving = s.add(m_pos);
+	auto locked = s.add(l_pos);
+	s.lock(l_pos);
+	GIVEN("a system with a locked and unlocked ball") {
+		WHEN("simulate for a second at 60fps") {
+			for (int i=0; i<frames; ++i)
+				s.simulate(delta);
+			vec2 new_m = s.get(moving).pos();
+			THEN("locked ball didn't move and unlocked moved towards locked") {
+				vec2 new_l = s.get_locked().pos();
+				REQUIRE(new_l == l_pos);
+				REQUIRE(distance(l_pos, new_m) < original_dist);
+
+				AND_WHEN("unlock locked ball and simulate again") {
+					s.unlock();
+					for (int i=0; i<frames; ++i)
+						s.simulate(delta);
+
+					THEN("locked ball moved") {
+						new_l = s.get(locked).pos();
+						REQUIRE(distance(l_pos, new_l) > 0);
+					}
+				}
+			}
+		}
+	}
+}
