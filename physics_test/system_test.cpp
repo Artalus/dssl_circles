@@ -114,3 +114,54 @@ SCENARIO("three-ball-line system") {
 		}
 	}
 }
+
+SCENARIO("removing balls from a system") {
+	std::vector<vec2> positions{vec2{11.1, 22.2}, vec2{0,1}, vec2{0,2.5}};
+	positions.emplace_back(*rbegin(positions));
+
+
+	GIVEN("an empty system") {
+		phys_system s;
+		REQUIRE(s.size() == 0);
+
+		WHEN("clicking anywhere") {
+			for (auto &&v : positions)
+				s.remove(v);
+			THEN("nothing changes")
+				REQUIRE(s.size() == 0);
+		}
+
+		WHEN("adding 4 elements") {
+			for (auto &&v : positions)
+				s.add(v);
+			THEN("size is 4")
+				REQUIRE(s.size() == 4);
+		}
+
+		WHEN("clicking on an empty space") {
+			s.remove(positions[0]*2.f);
+			THEN("nothing changes")
+				REQUIRE(s.size() == 4);
+		}
+		WHEN("clicking on a point with a ball") {
+			s.remove(positions[0]);
+			THEN("size is decreased")
+				REQUIRE(s.size() == 3);
+		}
+		WHEN("clicking on a point with two balls") {
+			s.remove(*rbegin(positions));
+			THEN("removed is only 1 element")
+				REQUIRE(s.size() == 2);
+			WHEN("clicking on this point again") {
+				s.remove(*rbegin(positions));
+				THEN("removed is only 1 element")
+					REQUIRE(s.size() == 1);
+			}
+			AND_WHEN("clicking again") {
+				s.remove(*rbegin(positions));
+				THEN("nothing changed")
+					REQUIRE(s.size() == 1);
+			}
+		}
+	}
+}
