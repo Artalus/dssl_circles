@@ -1,7 +1,6 @@
-#include <catch.hpp>
+#include "common.h"
 #include <chrono>
 #include "../physics/phys_system.h"
-#include "../physics/vec2.h"
 #include "../physics/ball.h"
 #include <glm/gtx/vector_angle.hpp>
 

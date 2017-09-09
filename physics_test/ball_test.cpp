@@ -1,5 +1,4 @@
-#include <catch.hpp>
-#include "../physics/vec2.h"
+#include "common.h"
 #include "../physics/ball.h"
 
 
