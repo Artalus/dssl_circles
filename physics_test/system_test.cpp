@@ -198,3 +198,24 @@ SCENARIO("locking a ball") {
 		}
 	}
 }
+
+
+SCENARIO("dragging a ball") {
+	phys_system s;
+	const vec2 start{0,0}, diff={12,2}, end{start+diff};
+	s.add({0,0});
+	GIVEN("a system with 1 ball at 0;0") {
+		s.lock(start);
+		REQUIRE(s.get_locked().pos() == start);
+		WHEN("simulate for a second at 60fps") {
+			for (int i=0; i<frames; ++i)
+				s.simulate(delta);
+			AND_WHEN("dragged") {
+				s.drag(diff);
+				THEN("its pos changed for that diff")
+					REQUIRE(s.get_locked().pos() == end);
+			}
+		}
+		s.unlock();
+	}
+}
