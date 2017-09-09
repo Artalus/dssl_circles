@@ -93,7 +93,7 @@ SCENARIO("three-ball-line system") {
 				REQUIRE(system.size() == 3);
 			AND_WHEN("simulate for a second at 60fps") {
 				constexpr auto frames = 60;
-				constexpr milliseconds delta = 1s/frames;
+				constexpr auto delta = fmilliseconds(1s)/frames;
 				for (int i = 0; i < frames; ++i) {
 					system.simulate(delta);
 				}

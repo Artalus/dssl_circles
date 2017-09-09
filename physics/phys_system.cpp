@@ -16,7 +16,8 @@ size_t phys_system::size() const {
 	return balls_.size();
 }
 
-void phys_system::simulate(std::chrono::milliseconds delta) {
+void phys_system::simulate(fmilliseconds delta) {
+	assert(delta.count() > 0);
 }
 
 const ball & phys_system::get(uint64_t id) {

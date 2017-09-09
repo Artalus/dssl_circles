@@ -3,7 +3,9 @@
 #include <memory>
 
 #include "ball.h"
+#include <chrono>
 
+using fmilliseconds = std::chrono::duration<float, std::milli>;
 
 class phys_system
 {
@@ -41,6 +43,6 @@ public:
 	~phys_system() = default;
 	uint64_t add(const vec2 &pos);
 	size_t size() const;
-	void simulate(std::chrono::milliseconds delta);
+	void simulate(fmilliseconds delta);
 	const ball& get(uint64_t bm);
 };
