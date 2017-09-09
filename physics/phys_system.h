@@ -52,10 +52,11 @@ public:
 
 	void simulate(fmilliseconds delta);
 
-	const ball& get(uint64_t bm) const;
-	const ball& get_locked() const;
+	ball& get(uint64_t bm) const;
+	ball& get_locked() const;
 	void unlock();
 	void lock(const vec2 &pos);
+	void drag(const vec2 &diff);
 
 private:
 	using bw_iterator = decltype(balls_.cbegin());

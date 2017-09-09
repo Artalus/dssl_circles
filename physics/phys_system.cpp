@@ -30,7 +30,7 @@ void phys_system::simulate(fmilliseconds delta) {
 	apply_forces(calc_forces(), delta);
 }
 
-const ball& phys_system::get(uint64_t id) const {
+ball& phys_system::get(uint64_t id) const {
 	const auto it = lower_bound(cbegin(balls_), cend(balls_), id,
 		[](auto &&lhs, auto rhs) {
 		return lhs.id < rhs;
@@ -40,7 +40,7 @@ const ball& phys_system::get(uint64_t id) const {
 	return it->get();
 }
 
-const ball & phys_system::get_locked() const {
+ball& phys_system::get_locked() const {
 	assert(locked_id_.has_value() && "no ball was locked in system");
 	return get(locked_id_.value());
 }
@@ -57,6 +57,12 @@ void phys_system::lock(const vec2 &pos) {
 		return;
 
 	locked_id_ = target->id;
+}
+
+void phys_system::drag(const vec2 &diff) {
+	assert(locked_id_.has_value() && "no ball was locked in system");
+
+	get_locked().move(diff);
 }
 
 void phys_system::apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> &forces,
