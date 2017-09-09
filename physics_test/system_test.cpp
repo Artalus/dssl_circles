@@ -53,11 +53,11 @@ SCENARIO("single ball system") {
 
 		WHEN("add a ball") {
 			const vec2 original_pos{5.2, 5.3};
-			const auto i = system.add(original_pos);
+			const auto it = system.add(original_pos);
 			THEN("size increased")
 				REQUIRE(system.size() == 1);
 			WHEN("get ball by id") {
-				const auto b = system.get(i);
+				const auto b = system.get(it);
 				THEN("it is same ball") {
 					REQUIRE(b.pos() == original_pos);
 				}
@@ -68,7 +68,7 @@ SCENARIO("single ball system") {
 					system.simulate(delta);
 				}
 				THEN("ball is in same position")
-					REQUIRE(system.get(i).pos() == original_pos);
+					REQUIRE(system.get(it).pos() == original_pos);
 			}
 		}
 	}
@@ -137,31 +137,31 @@ SCENARIO("removing balls from a system") {
 				s.add(v);
 			THEN("size is 4")
 				REQUIRE(s.size() == 4);
-		}
 
-		WHEN("clicking on an empty space") {
-			s.remove(positions[0]*2.f);
-			THEN("nothing changes")
-				REQUIRE(s.size() == 4);
-		}
-		WHEN("clicking on a point with a ball") {
-			s.remove(positions[0]);
-			THEN("size is decreased")
-				REQUIRE(s.size() == 3);
-		}
-		WHEN("clicking on a point with two balls") {
-			s.remove(*rbegin(positions));
-			THEN("removed is only 1 element")
-				REQUIRE(s.size() == 2);
-			WHEN("clicking on this point again") {
-				s.remove(*rbegin(positions));
-				THEN("removed is only 1 element")
-					REQUIRE(s.size() == 1);
+			WHEN("clicking on an empty space") {
+				s.remove(positions[0]*2.f);
+				THEN("nothing changes")
+					REQUIRE(s.size() == 4);
 			}
-			AND_WHEN("clicking again") {
-				s.remove(*rbegin(positions));
-				THEN("nothing changed")
-					REQUIRE(s.size() == 1);
+			WHEN("clicking on a point with a ball") {
+				s.remove(positions[0]);
+				THEN("size is decreased")
+					REQUIRE(s.size() == 3);
+				WHEN("clicking on a point with two balls") {
+					s.remove(*rbegin(positions));
+					THEN("removed is only 1 element")
+						REQUIRE(s.size() == 2);
+					WHEN("clicking on this point again") {
+						s.remove(*rbegin(positions));
+						THEN("removed is only 1 element")
+							REQUIRE(s.size() == 1);
+						AND_WHEN("clicking again") {
+							s.remove(*rbegin(positions));
+							THEN("nothing changed")
+								REQUIRE(s.size() == 1);
+						}
+					}
+				}
 			}
 		}
 	}
