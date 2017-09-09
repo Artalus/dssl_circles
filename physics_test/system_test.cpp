@@ -178,10 +178,11 @@ SCENARIO("locking a ball") {
 			for (int i=0; i<frames; ++i)
 				s.simulate(delta);
 			vec2 new_m = s.get(moving).pos();
-			THEN("locked ball didn't move and unlocked moved towards locked") {
+			THEN("locked ball didn't move") {
 				vec2 new_l = s.get_locked().pos();
 				REQUIRE(new_l == l_pos);
-				REQUIRE(distance(l_pos, new_m) < original_dist);
+				SECTION("and unlocked moved towards locked")
+					REQUIRE(distance(l_pos, new_m) < original_dist);
 
 				AND_WHEN("unlock locked ball and simulate again") {
 					s.unlock();
