@@ -3,8 +3,8 @@
 
 uint64_t phys_system::add(const vec2 &pos) {
 	ball_wrapper w(pos);
-	auto id = w.id;
-	const auto place = std::lower_bound(begin(balls_), end(balls_), id,
+	const auto id = w.id;
+	const auto place = lower_bound(cbegin(balls_), cend(balls_), id,
 		[](auto &&lhs, auto rhs) {
 		return lhs.id <= rhs;
 	});
@@ -20,8 +20,8 @@ void phys_system::simulate(fmilliseconds delta) {
 	assert(delta.count() > 0);
 }
 
-const ball & phys_system::get(uint64_t id) {
-	auto it = lower_bound(begin(balls_), end(balls_), id,
+const ball& phys_system::get(uint64_t id) {
+	const auto it = lower_bound(cbegin(balls_), cend(balls_), id,
 		[](auto &&lhs, auto rhs) {
 		return lhs.id < rhs;
 	});
