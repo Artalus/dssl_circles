@@ -60,14 +60,14 @@ namespace test_vec2 {
 		GIVEN("default constructed vector") {
 			vec2 v{};
 			SECTION("length is 0")
-				REQUIRE(v.length() == 0);
+				REQUIRE(length(v) == 0);
 		}
 		GIVEN("some vector") {
 			vec2 v1{1,0}, v2{0,1}, v3{3,4};
 			SECTION("length is present") {
-				REQUIRE(v1.length() == Approx(1));
-				REQUIRE(v2.length() == Approx(1));
-				REQUIRE(v3.length() == Approx(5));
+				REQUIRE(length(v1) == Approx(1));
+				REQUIRE(length(v2) == Approx(1));
+				REQUIRE(length(v3) == Approx(5));
 			}
 		}
 	}
