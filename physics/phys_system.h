@@ -50,7 +50,7 @@ public:
 	const ball& get(uint64_t bm);
 
 private:
-	using bw_iterator = decltype(balls_.begin());
+	using bw_iterator = decltype(balls_.cbegin());
 	void apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> &forces,
 		fmilliseconds delta);
 	vec2 calc_force_on(const ball &b, const uint64_t id);
