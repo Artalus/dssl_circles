@@ -58,4 +58,6 @@ private:
 		fmilliseconds delta);
 	vec2 calc_force_on(const ball &b, const uint64_t id);
 	std::vector<std::tuple<bw_iterator, vec2>> calc_forces();
+
+	bw_iterator find_in_pos(const vec2 &pos) const;
 };
