@@ -1,9 +1,12 @@
 #pragma once
 #include <chrono>
 #include <memory>
+#include <vector>
 
 #include "ball.h"
 #include <chrono>
+#include <tuple>
+#include <vector>
 
 using fmilliseconds = std::chrono::duration<float, std::milli>;
 
@@ -45,4 +48,11 @@ public:
 	size_t size() const;
 	void simulate(fmilliseconds delta);
 	const ball& get(uint64_t bm);
+
+private:
+	using bw_iterator = decltype(balls_.begin());
+	void apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> &forces,
+		fmilliseconds delta);
+	vec2 calc_force_on(const ball &b, const uint64_t id);
+	std::vector<std::tuple<bw_iterator, vec2>> calc_forces();
 };
