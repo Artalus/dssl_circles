@@ -14,7 +14,11 @@ class phys_system
 
 		static uint64_t guid_;
 		std::unique_ptr<ball> b_;
+		vec2 impulse;
 	public:
+		float mass = 10.f;
+		void add_impulse(vec2 diff) {impulse += diff;}
+		vec2 get_impulse() const { return impulse; }
 		uint64_t id;
 
 		explicit ball_wrapper(vec2 pos = {})

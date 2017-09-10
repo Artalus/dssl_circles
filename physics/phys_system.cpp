@@ -69,11 +69,13 @@ void phys_system::apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> 
 	std::chrono::milliseconds delta) {
 	for ( auto&& pair : forces ) {
 		//auto [it, force] = pair;
-		const auto it = std::get<0>(pair);
+		auto it = std::get<0>(pair);
 		const auto force = std::get<1>(pair);
 
-		//TODO: implement actual FORCE, not interprete it as velocity
-		const vec2 dist = force * static_cast<float>(delta.count());
+		auto fdelta = static_cast<float>(delta.count()) / 1000;
+		it->add_impulse(force*fdelta);
+
+		auto dist = it->get_impulse() / it->mass * fdelta;
 		it->get().move(dist);
 	}
 }
