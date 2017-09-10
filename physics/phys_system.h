@@ -39,6 +39,7 @@ class phys_system
 	};
 
 	std::vector<ball_wrapper> balls_;
+	using bw_iterator = decltype(balls_.cbegin());
 
 public:
 	phys_system() = default;
@@ -56,8 +57,10 @@ public:
 	void lock(const vec2 &pos);
 	void drag(const vec2 &diff);
 
+	bw_iterator begin() const { return balls_.cbegin(); }
+	bw_iterator end() const { return balls_.end(); }
+
 private:
-	using bw_iterator = decltype(balls_.cbegin());
 	void apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> &forces,
 		std::chrono::milliseconds delta);
 	vec2 calc_force_on(const ball &b, const uint64_t id);

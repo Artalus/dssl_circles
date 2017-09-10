@@ -53,7 +53,7 @@ void phys_system::lock(const vec2 &pos) {
 	assert(!locked_id_.has_value() && "cannot lock a ball when another is already locked");
 
 	const auto target = find_in_pos(pos);
-	if (target == end(balls_))
+	if (target == end())
 		return;
 
 	locked_id_ = target->id;
@@ -114,7 +114,7 @@ uint64_t phys_system::ball_wrapper::guid_ = 1;
 void phys_system::remove(const vec2 &pos) {
 	const auto target = find_in_pos(pos);
 
-	if (target == end(balls_))
+	if (target == end())
 		return;
 
 	balls_.erase(target);
