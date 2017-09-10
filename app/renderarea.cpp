@@ -1,6 +1,7 @@
 #include "renderarea.h"
 
 #include <QPainter>
+#include <iostream>
 
 std::vector<QPen> colors;
 
@@ -20,7 +21,11 @@ RenderArea::RenderArea(QWidget *parent)
 
 RenderArea::~RenderArea() {
 	should_finish = true;
-	phys_thread.join();
+	try {
+		phys_thread.join();
+	} catch(std::exception &ex) {
+		std::cerr << "couldn't safely join thread: " << ex.what();
+	}
 }
 
 QSize RenderArea::minimumSizeHint() const
@@ -60,24 +65,27 @@ void RenderArea::phys_loop() {
 	// TODO: implement actual frame limiting
 	auto last = clk::now();
 
-
-	while(!should_finish) {
-		const auto now = clk::now();
-		auto actual_delta = now-last;
-		if (actual_delta >= required_delta)
-		{
-			last = now;
-			std::lock_guard<std::mutex> g(system_mutex);
-			while (actual_delta >= required_delta) {
-				auto step = duration_cast<milliseconds>(actual_delta < required_delta
-					? actual_delta
-					: required_delta);
-				s.simulate(step);
-				actual_delta -= required_delta;
+	try {
+		while(!should_finish) {
+			const auto now = clk::now();
+			auto actual_delta = now-last;
+			if (actual_delta >= required_delta)
+			{
+				last = now;
+				std::lock_guard<std::mutex> g(system_mutex);
+				while (actual_delta >= required_delta) {
+					auto step = duration_cast<milliseconds>(actual_delta < required_delta
+						? actual_delta
+						: required_delta);
+					s.simulate(step);
+					actual_delta -= required_delta;
+				}
 			}
+			//std::this_thread::sleep_until(now + required_delta);
+			if (!should_finish)
+				this->update();
 		}
-		//std::this_thread::sleep_until(now + required_delta);
-		if (!should_finish)
-			this->update();
+	} catch(std::exception &ex) {
+		std::cerr << "couldn't perform physics loop: " << ex.what();
 	}
 }
