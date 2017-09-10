@@ -26,7 +26,8 @@ public:
 		return glm::length(pos_ - p) <= radius;
 	}
 
+	static const float radius;
+
 private:
 	vec2 pos_;
-	static const float radius;
 };
