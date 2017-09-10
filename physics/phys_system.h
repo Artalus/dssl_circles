@@ -39,7 +39,8 @@ class phys_system
 	};
 
 	std::vector<ball_wrapper> balls_;
-	using bw_iterator = decltype(balls_.cbegin());
+	using cbw_iterator = std::vector<ball_wrapper>::const_iterator;
+	using bw_iterator = std::vector<ball_wrapper>::iterator;
 
 public:
 	phys_system() = default;
@@ -57,8 +58,12 @@ public:
 	void lock(const vec2 &pos);
 	void drag(const vec2 &diff);
 
-	bw_iterator begin() const { return balls_.cbegin(); }
-	bw_iterator end() const { return balls_.end(); }
+	bw_iterator begin() { return balls_.begin(); }
+	cbw_iterator begin() const { return balls_.begin(); }
+	cbw_iterator cbegin() const { return begin(); }
+	bw_iterator end() { return balls_.end(); }
+	cbw_iterator end() const { return balls_.end(); }
+	cbw_iterator cend() const { return end(); }
 
 private:
 	void apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> &forces,
@@ -66,7 +71,7 @@ private:
 	vec2 calc_force_on(const ball &b, const uint64_t id);
 	std::vector<std::tuple<bw_iterator, vec2>> calc_forces();
 
-	bw_iterator find_in_pos(const vec2 &pos) const;
+	cbw_iterator find_in_pos(const vec2 &pos) const;
 
 	std::optional<decltype(ball_wrapper::guid_)> locked_id_ = std::nullopt;
 };

@@ -13,7 +13,7 @@ vec2 force_formula(vec2 direction) {
 uint64_t phys_system::add(const vec2 &pos) {
 	ball_wrapper w(pos);
 	const auto id = w.id;
-	const auto place = lower_bound(cbegin(balls_), cend(balls_), id,
+	const auto place = lower_bound(cbegin(), cend(), id,
 		[](auto &&lhs, auto rhs) {
 		return lhs.id <= rhs;
 	});
@@ -31,11 +31,11 @@ void phys_system::simulate(std::chrono::milliseconds delta) {
 }
 
 ball& phys_system::get(uint64_t id) const {
-	const auto it = lower_bound(cbegin(balls_), cend(balls_), id,
+	const auto it = lower_bound(cbegin(), cend(), id,
 		[](auto &&lhs, auto rhs) {
 		return lhs.id < rhs;
 	});
-	if (it == cend(balls_))
+	if (it == cend())
 		throw std::runtime_error("couldn't find ball with id " + std::to_string(id));
 	return it->get();
 }
@@ -93,7 +93,7 @@ std::vector<std::tuple<phys_system::bw_iterator, vec2>> phys_system::calc_forces
 	std::vector<std::tuple<bw_iterator, vec2>> result;
 	result.reserve(size());
 
-	for ( auto it = cbegin(balls_); it != cend(balls_); ++it ) {
+	for ( auto it = begin(); it != end(); ++it ) {
 		if (locked_id_.has_value() && it->id == locked_id_)
 			continue;
 		result.emplace_back(make_tuple(it, calc_force_on(it->get(), it->id)));
@@ -102,8 +102,8 @@ std::vector<std::tuple<phys_system::bw_iterator, vec2>> phys_system::calc_forces
 	return result;
 }
 
-phys_system::bw_iterator phys_system::find_in_pos(const vec2 &pos) const {
-	return find_if(cbegin(balls_), cend(balls_), [&pos](const ball_wrapper& bw)
+phys_system::cbw_iterator phys_system::find_in_pos(const vec2 &pos) const {
+	return find_if(cbegin(), cend(), [&pos](const ball_wrapper& bw)
 		{ return bw.get().is_point_inside(pos); }
 	);
 }
