@@ -10,7 +10,7 @@ using namespace std::chrono;
 
 namespace phys_system_test {
 	constexpr auto frames = 60;
-	constexpr auto delta = fmilliseconds(1s)/frames;
+	constexpr auto delta = milliseconds(1s)/frames;
 
 
 	SCENARIO("id progression") {

@@ -7,8 +7,6 @@
 
 #include "ball.h"
 
-using fmilliseconds = std::chrono::duration<float, std::milli>;
-
 class phys_system
 {
 	class ball_wrapper {
@@ -50,7 +48,7 @@ public:
 	void remove(const vec2 &pos);
 	size_t size() const;
 
-	void simulate(fmilliseconds delta);
+	void simulate(std::chrono::milliseconds delta);
 
 	ball& get(uint64_t bm) const;
 	ball& get_locked() const;
@@ -61,7 +59,7 @@ public:
 private:
 	using bw_iterator = decltype(balls_.cbegin());
 	void apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> &forces,
-		fmilliseconds delta);
+		std::chrono::milliseconds delta);
 	vec2 calc_force_on(const ball &b, const uint64_t id);
 	std::vector<std::tuple<bw_iterator, vec2>> calc_forces();
 

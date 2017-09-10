@@ -25,7 +25,7 @@ size_t phys_system::size() const {
 	return balls_.size();
 }
 
-void phys_system::simulate(fmilliseconds delta) {
+void phys_system::simulate(std::chrono::milliseconds delta) {
 	assert(delta.count() > 0);
 	apply_forces(calc_forces(), delta);
 }
@@ -66,7 +66,7 @@ void phys_system::drag(const vec2 &diff) {
 }
 
 void phys_system::apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> &forces,
-	fmilliseconds delta) {
+	std::chrono::milliseconds delta) {
 	for ( auto&& pair : forces ) {
 		//auto [it, force] = pair;
 		const auto it = std::get<0>(pair);
