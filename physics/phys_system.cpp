@@ -68,9 +68,8 @@ void phys_system::lock(const vec2 &pos) {
 }
 
 void phys_system::drag(const vec2 &diff) {
-	assert(locked_id_.has_value() && "no ball was locked in system");
-
-	get_locked().move(diff);
+	if(locked_id_.has_value())
+		get_locked().move(diff);
 }
 
 void phys_system::apply_forces(const std::vector<std::tuple<bw_iterator, vec2>> &forces,

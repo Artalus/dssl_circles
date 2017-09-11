@@ -1,9 +1,17 @@
 #include "renderarea.h"
 
 #include <QPainter>
+#include <QMouseEvent>
 #include <iostream>
 
+
+namespace {
 std::vector<QPen> colors;
+void add_color() {
+	colors.emplace_back(qRgb(10*(rand()%26),10*(rand()%26),10*(rand()%26)));
+}
+}
+
 
 RenderArea::RenderArea(QWidget *parent)
 	: QWidget(parent)
@@ -13,10 +21,9 @@ RenderArea::RenderArea(QWidget *parent)
 	setAutoFillBackground(true);
 
 	for (int i = 0; i < 10; ++i ){
-		s.add({10+ (rand() % 130), 10 + (rand() % 100)});
-		colors.emplace_back(qRgb(10*(rand()%26),10*(rand()%26),10*(rand()%26)));
+		s.add({10+ (rand() % 330), 10 + (rand() % 250)});
+		add_color();
 	}
-
 	phys_thread = std::thread{&RenderArea::phys_loop, this};
 	connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
 	timer.start(1000/60);
@@ -43,6 +50,44 @@ QSize RenderArea::sizeHint() const
 
 vec2 RenderArea::get_click_pos(QPointF pos) const {
 	return { pos.x() / scale_factor, pos.y() / scale_factor };
+}
+
+QPointF last_pos;
+
+void RenderArea::mousePressEvent(QMouseEvent *event) {
+	if (event->button() != Qt::MouseButton::LeftButton)
+		return;
+	std::lock_guard<std::mutex> g(system_mutex);
+	s.lock(get_click_pos(event->pos()));
+	last_pos = event->pos();
+}
+
+void RenderArea::mouseMoveEvent(QMouseEvent *event) {
+	if (!event->buttons().testFlag(Qt::MouseButton::LeftButton))
+		return;
+
+	std::lock_guard<std::mutex> g(system_mutex);
+	const auto pos = event->pos();
+	const QPointF delta = pos - last_pos;
+	const auto v = get_click_pos(delta);
+	s.drag(v);
+	last_pos = pos;
+}
+
+void RenderArea::mouseReleaseEvent(QMouseEvent *event) {
+	std::lock_guard<std::mutex> g(system_mutex);
+	bool was_locked = s.unlock();
+	if (was_locked)
+		return;
+
+	const auto pos = get_click_pos(event->pos());
+	if (event->button() == Qt::MouseButton::LeftButton) {
+		s.add(pos);
+		add_color();
+	}
+	else if (event->button() == Qt::MouseButton::RightButton) {
+		s.remove(pos);
+	}
 }
 
 void RenderArea::paintEvent(QPaintEvent * /* event */)
