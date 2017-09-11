@@ -69,8 +69,8 @@ void RenderArea::phys_loop() {
 	using clk = std::chrono::system_clock;
 	using namespace std::chrono;
 	using namespace std::chrono_literals;
-	constexpr auto frames_per_second = 10;
-	constexpr auto required_delta = 1ms;
+	constexpr auto frames_per_second = 60;
+	constexpr auto maximal_delta = 1000ms/frames_per_second, minimal_delta = 1ms;
 	// TODO: implement actual frame limiting
 	auto last = clk::now();
 
@@ -78,19 +78,18 @@ void RenderArea::phys_loop() {
 		while(!should_finish) {
 			const auto now = clk::now();
 			auto actual_delta = now-last;
-			if (actual_delta >= required_delta)
+			if (actual_delta >= minimal_delta)
 			{
 				last = now;
 				std::lock_guard<std::mutex> g(system_mutex);
-				while (actual_delta >= required_delta) {
-					auto step = duration_cast<milliseconds>(actual_delta < required_delta
-						? actual_delta
-						: required_delta);
-					s.simulate(step);
-					actual_delta -= required_delta;
+				while (actual_delta >= maximal_delta) {
+					s.simulate(maximal_delta);
+					actual_delta -= maximal_delta;
 				}
+				if ( actual_delta >= minimal_delta )
+					s.simulate(duration_cast<milliseconds>(actual_delta));
 			}
-			//std::this_thread::sleep_until(now + required_delta);
+			//std::this_thread::sleep_until(now + maximal_delta);
 		}
 	} catch(std::exception &ex) {
 		std::cerr << "couldn't perform physics loop: " << ex.what();
