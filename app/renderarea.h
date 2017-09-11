@@ -20,6 +20,8 @@ protected:
 	void paintEvent(QPaintEvent *event) override;
 
 private:
+	vec2 RenderArea::get_click_pos(QPoint pos) const;
+	const float scale_factor = 1;
 	void phys_loop();
 	phys_system s;
 	std::thread phys_thread;

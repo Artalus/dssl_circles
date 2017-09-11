@@ -38,13 +38,17 @@ QSize RenderArea::sizeHint() const
 	return QSize(400, 200);
 }
 
+vec2 RenderArea::get_click_pos(QPoint pos) const {
+	return { pos.x() / scale_factor, pos.y() / scale_factor };
+}
+
 void RenderArea::paintEvent(QPaintEvent * /* event */)
 {
 	std::lock_guard<std::mutex> g(system_mutex);
 	QPixmap doubleBuffer{this->size()};
 	QPainter painter(this);
 	QPainter dbPainter(&doubleBuffer);
-	dbPainter.scale(3,3);
+	dbPainter.scale(scale_factor, scale_factor);
 
 	for (auto &&b : s) {
 		const auto &pos = b.get().pos();
