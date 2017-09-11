@@ -169,23 +169,22 @@ namespace phys_system_test {
 	SCENARIO("locking a ball") {
 		phys_system s;
 		vec2 m_pos{0,0}, l_pos{100,0};
-		auto original_dist = distance(l_pos, m_pos);
 		auto moving = s.add(m_pos);
 		auto locked = s.add(l_pos);
-		s.lock(l_pos);
-		GIVEN("a system with a locked and unlocked ball") {
-			WHEN("simulate for a second at 60fps") {
+		GIVEN("a system with two balls") {
+			WHEN("lock one and simulate for a second at 60fps") {
+				s.lock(l_pos);
 				for (int i=0; i<frames; ++i)
 					s.simulate(delta);
-				vec2 new_m = s.get(moving).pos();
 				THEN("locked ball didn't move") {
+					vec2 new_m = s.get(moving).pos();
 					vec2 new_l = s.get_locked().pos();
 					REQUIRE(new_l == l_pos);
-					SECTION("and unlocked moved towards locked")
-						REQUIRE(distance(l_pos, new_m) < original_dist);
+					SECTION("and unlocked moved")
+						REQUIRE(distance(m_pos, new_m) > 0);
 
 					AND_WHEN("unlock locked ball and simulate again") {
-						s.unlock();
+						bool u = s.unlock();
 						for (int i=0; i<frames; ++i)
 							s.simulate(delta);
 
@@ -193,8 +192,24 @@ namespace phys_system_test {
 							new_l = s.get(locked).pos();
 							REQUIRE(distance(l_pos, new_l) > 0);
 						}
+						SECTION("and unlock returned true")
+							REQUIRE(u == true);
 					}
 				}
+			}
+			WHEN("try to lock pos outside of both balls and simulate") {
+				s.lock(l_pos * 3.f);
+				vec2 l_pos = s.get(locked).pos(),
+					m_pos = s.get(moving).pos();
+
+				for (int i=0; i<frames; ++i)
+					s.simulate(delta);
+				THEN("both moved") {
+					REQUIRE(distance(l_pos, s.get(locked).pos()) > 0);
+					REQUIRE(distance(m_pos, s.get(moving).pos()) > 0);
+				}
+				SECTION("and unlock returned false")
+					REQUIRE(s.unlock() == false);
 			}
 		}
 	}

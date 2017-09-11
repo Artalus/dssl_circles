@@ -58,7 +58,7 @@ public:
 
 	ball& get(uint64_t bm) const;
 	ball& get_locked() const;
-	void unlock();
+	bool unlock();
 	void lock(const vec2 &pos);
 	void drag(const vec2 &diff);
 

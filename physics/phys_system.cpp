@@ -45,8 +45,12 @@ ball& phys_system::get_locked() const {
 	return get(locked_id_.value());
 }
 
-void phys_system::unlock() {
+bool phys_system::unlock() {
+	bool r = false;
+	if (locked_id_.has_value())
+		r = true;
 	locked_id_.reset();
+	return r;
 }
 
 void phys_system::lock(const vec2 &pos) {
