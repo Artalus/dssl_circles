@@ -18,28 +18,11 @@
     <item row="0" column="0">
      <widget class="RenderArea" name="canvas" native="true">
       <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;sometext&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string/>
       </property>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QStatusBar" name="statusBar">
-   <property name="focusPolicy">
-    <enum>Qt::NoFocus</enum>
-   </property>
-   <property name="toolTip">
-    <string>aaaaa</string>
-   </property>
-   <property name="statusTip">
-    <string/>
-   </property>
-   <property name="whatsThis">
-    <string/>
-   </property>
-   <property name="accessibleDescription">
-    <string/>
-   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
