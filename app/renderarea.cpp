@@ -41,7 +41,7 @@ QSize RenderArea::sizeHint() const
 	return QSize(400, 200);
 }
 
-vec2 RenderArea::get_click_pos(QPoint pos) const {
+vec2 RenderArea::get_click_pos(QPointF pos) const {
 	return { pos.x() / scale_factor, pos.y() / scale_factor };
 }
 
