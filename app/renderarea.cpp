@@ -50,8 +50,10 @@ void RenderArea::paintEvent(QPaintEvent * /* event */)
 	std::lock_guard<std::mutex> g(system_mutex);
 	QPixmap doubleBuffer{this->size()};
 	QPainter painter(this);
+	painter.setRenderHint(QPainter::Antialiasing, true);
 	QPainter dbPainter(&doubleBuffer);
 	dbPainter.scale(scale_factor, scale_factor);
+	dbPainter.setRenderHint(QPainter::Antialiasing, true);
 
 	for (auto &&b : s) {
 		const auto &pos = b.get().pos();
