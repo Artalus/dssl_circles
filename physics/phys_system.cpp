@@ -7,7 +7,11 @@
 
 vec2 force_formula(vec2 direction) {
 	const auto r = length(direction);
-	return (1/r - 1/r/r) * direction;
+	if (r==0)
+		return normalize(vec2{rand(), rand()});
+	vec2 result{(1/r - 1/r/r) * normalize(direction)};
+	assert(!isnan(length(result)));
+	return result;
 }
 
 uint64_t phys_system::add(const vec2 &pos) {
