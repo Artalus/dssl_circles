@@ -16,7 +16,7 @@ class phys_system
 		std::unique_ptr<ball> b_;
 		vec2 impulse;
 	public:
-		float mass = 10.f;
+		float mass = 0.2f;
 		void add_impulse(vec2 diff) {impulse += diff;}
 		vec2 get_impulse() const { return impulse; }
 		uint64_t id;

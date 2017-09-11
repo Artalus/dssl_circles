@@ -1,3 +1,3 @@
 #include "ball.h"
 
-const float ball::radius = 1.f;
+const float ball::radius = 5.f;
