@@ -7,6 +7,7 @@ std::vector<QPen> colors;
 
 RenderArea::RenderArea(QWidget *parent)
 	: QWidget(parent)
+	, timer(this)
 {
 	setBackgroundRole(QPalette::Base);
 	setAutoFillBackground(true);
@@ -17,6 +18,8 @@ RenderArea::RenderArea(QWidget *parent)
 	}
 
 	phys_thread = std::thread{&RenderArea::phys_loop, this};
+	connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
+	timer.start(1000/60);
 }
 
 RenderArea::~RenderArea() {
@@ -86,8 +89,6 @@ void RenderArea::phys_loop() {
 				}
 			}
 			//std::this_thread::sleep_until(now + required_delta);
-			if (!should_finish)
-				this->update();
 		}
 	} catch(std::exception &ex) {
 		std::cerr << "couldn't perform physics loop: " << ex.what();

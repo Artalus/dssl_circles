@@ -1,5 +1,6 @@
 #pragma once
 #include <QWidget>
+#include <QTimer>
 #include "../physics/phys_system.h"
 #include <thread>
 #include <mutex>
@@ -21,6 +22,8 @@ protected:
 
 private:
 	vec2 RenderArea::get_click_pos(QPoint pos) const;
+	QTimer timer;
+
 	const float scale_factor = 1;
 	void phys_loop();
 	phys_system s;
