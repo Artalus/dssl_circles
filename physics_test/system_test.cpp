@@ -51,7 +51,7 @@ namespace phys_system_test {
 				REQUIRE(system.size() == 0);
 
 			WHEN("add a ball") {
-				const vec2 original_pos{5.2, 5.3};
+				const vec2 original_pos{5.2_r, 5.3_r};
 				const auto it = system.add(original_pos);
 				THEN("size increased")
 					REQUIRE(system.size() == 1);
@@ -80,9 +80,9 @@ namespace phys_system_test {
 				REQUIRE(system.size() == 0);
 
 			WHEN("add line of three balls") {
-				const vec2 original_1{-10,0},
+				const vec2 original_1{-2._r,0},
 					original_m{0,0},
-					original_2{10,0};
+					original_2{2._r,0};
 				const auto b1 = system.add(original_1),
 					bm = system.add(original_m),
 					b2 = system.add(original_2);
@@ -99,14 +99,14 @@ namespace phys_system_test {
 					}
 					THEN("middle ball is in same position")
 						REQUIRE(system.get(bm).pos() == original_m);
-					THEN("side ones have moved for same distance") {
+					SECTION("and side ones have moved for same distance") {
 						const auto b1_pos = system.get(b1).pos(),
 							b2_pos = system.get(b2).pos();
 						auto b1_vec = vec2_from_two_points(original_1, b1_pos),
 							b2_vec = -vec2_from_two_points(original_2, b2_pos);
 						REQUIRE(length(b1_vec) == Approx(length(b2_vec)));
 						SECTION("and are on same line")
-							REQUIRE(glm::angle(b1_vec, b2_vec) == Approx(0));
+							REQUIRE(glm::angle(normalize(b1_vec), normalize(b2_vec)) == Approx(0));
 						SECTION("and the distance is positive")
 							REQUIRE(glm::length(b1_vec) > 0);
 					}
@@ -116,7 +116,7 @@ namespace phys_system_test {
 	}
 
 	SCENARIO("removing balls from a system") {
-		std::vector<vec2> positions{vec2{11.1, 22.2}, vec2{0,1}, vec2{0,2.5}};
+		std::vector<vec2> positions{vec2{111.1_r, 222.2_r}, vec2{0,11._r}, vec2{0,22.5_r}};
 		positions.emplace_back(*rbegin(positions));
 
 
@@ -144,20 +144,23 @@ namespace phys_system_test {
 				}
 				WHEN("clicking on a point with a ball") {
 					s.remove(positions[0]);
-					THEN("size is decreased")
+					THEN("size is decreased") {
 						REQUIRE(s.size() == 3);
-					WHEN("clicking on a point with two balls") {
-						s.remove(*rbegin(positions));
-						THEN("removed is only 1 element")
-							REQUIRE(s.size() == 2);
-						WHEN("clicking on this point again") {
+						WHEN("clicking on a point with two balls") {
 							s.remove(*rbegin(positions));
-							THEN("removed is only 1 element")
-								REQUIRE(s.size() == 1);
-							AND_WHEN("clicking again") {
-								s.remove(*rbegin(positions));
-								THEN("nothing changed")
-									REQUIRE(s.size() == 1);
+							THEN("removed is only 1 element") {
+								REQUIRE(s.size() == 2);
+								WHEN("clicking on this point again") {
+									s.remove(*rbegin(positions));
+									THEN("removed is only 1 element") {
+										REQUIRE(s.size() == 1);
+										AND_WHEN("clicking again") {
+											s.remove(*rbegin(positions));
+											THEN("nothing changed")
+												REQUIRE(s.size() == 1);
+										}
+									}
+								}
 							}
 						}
 					}
@@ -168,7 +171,7 @@ namespace phys_system_test {
 
 	SCENARIO("locking a ball") {
 		phys_system s;
-		vec2 m_pos{0,0}, l_pos{100,0};
+		vec2 m_pos{0,0}, l_pos{100._r,0};
 		auto moving = s.add(m_pos);
 		auto locked = s.add(l_pos);
 		GIVEN("a system with two balls") {
@@ -217,7 +220,7 @@ namespace phys_system_test {
 
 	SCENARIO("dragging a ball") {
 		phys_system s;
-		const vec2 start{0,0}, diff={12,2}, end{start+diff};
+		const vec2 start{0,0}, diff={12._r,2._r}, end{start+diff};
 		s.add({0,0});
 		GIVEN("a system with 1 ball at 0;0") {
 			s.lock(start);

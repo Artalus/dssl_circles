@@ -9,12 +9,12 @@ namespace ball_test {
 			SECTION("its pos is zero")
 				REQUIRE(b.pos() == vec2(0,0));
 			WHEN("set pos") {
-				const vec2 p{5.1,6.2};
+				const vec2 p{5.1_r,6.2_r};
 				b.pos(p);
 				THEN("pos is changed")
 					REQUIRE(b.pos() == p);
 				AND_WHEN("moved") {
-					const vec2 d{11.2, 4};
+					const vec2 d{11.2_r, 4._r};
 					b.move(d);
 					THEN("pos is changed")
 						REQUIRE(b.pos() == p+d);
@@ -24,21 +24,21 @@ namespace ball_test {
 	}
 	SCENARIO("constructing") {
 		GIVEN("ball constructed with position x"){
-			const vec2 p{1.1, 2.2};
+			const vec2 p{1.1_r, 2.2_r};
 			ball b{p};
 			SECTION("its pos is this x")
 				REQUIRE(b.pos() == p);
 		}
 
 		GIVEN("ball constructed from ball x") {
-			ball b1{{3.4,5.6}}, b2{b1};
+			ball b1{{3.4_r,5.6_r}}, b2{b1};
 			SECTION("its pos == x.pos")
 				REQUIRE(b1.pos() == b2.pos());
 		}
 	}
 
 	SCENARIO("is point inside") {
-		const vec2 pos{10,10}, y{0,0.5}, x{0.5,0};
+		const vec2 pos{10._r,10._r}, y{0,0.5_r}, x{0.5_r,0};
 		GIVEN("a ball at 10;10") {
 			const ball b{pos};
 
