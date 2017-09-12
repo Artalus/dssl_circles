@@ -29,7 +29,11 @@ private:
 	const float scale_factor = 1;
 	vec2 RenderArea::get_click_pos(QPointF pos) const;
 	void phys_loop();
+	void add_ball(const vec2 &pos);
+	void remove_ball(const vec2 &pos);
 	phys_system s;
+	std::map<uint64_t, QPen> colors;
+
 	std::thread phys_thread;
 	std::mutex system_mutex;
 	std::atomic<bool> should_finish = false;

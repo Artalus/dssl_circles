@@ -4,15 +4,6 @@
 #include <QMouseEvent>
 #include <iostream>
 
-
-namespace {
-std::vector<QPen> colors;
-void add_color() {
-	colors.emplace_back(qRgb(10*(rand()%26),10*(rand()%26),10*(rand()%26)));
-}
-}
-
-
 RenderArea::RenderArea(QWidget *parent)
 	: QWidget(parent)
 	, timer(this)
@@ -21,8 +12,7 @@ RenderArea::RenderArea(QWidget *parent)
 	setAutoFillBackground(true);
 
 	for (int i = 0; i < 10; ++i ){
-		s.add({10+ (rand() % 330), 10 + (rand() % 250)});
-		add_color();
+		add_ball({10+ (rand() % 330), 10 + (rand() % 250)});
 	}
 	phys_thread = std::thread{&RenderArea::phys_loop, this};
 	connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
@@ -82,16 +72,16 @@ void RenderArea::mouseReleaseEvent(QMouseEvent *event) {
 
 	const auto pos = get_click_pos(event->pos());
 	if (event->button() == Qt::MouseButton::LeftButton) {
-		s.add(pos);
-		add_color();
+		add_ball(pos);
 	}
 	else if (event->button() == Qt::MouseButton::RightButton) {
-		s.remove(pos);
+		remove_ball(pos);
 	}
 }
 
 void RenderArea::paintEvent(QPaintEvent * /* event */)
 {
+	const static QBrush brush(Qt::GlobalColor::white);
 	std::lock_guard<std::mutex> g(system_mutex);
 	QPixmap doubleBuffer{this->size()};
 	QPainter painter(this);
@@ -99,6 +89,7 @@ void RenderArea::paintEvent(QPaintEvent * /* event */)
 	QPainter dbPainter(&doubleBuffer);
 	dbPainter.scale(scale_factor, scale_factor);
 	dbPainter.setRenderHint(QPainter::Antialiasing, true);
+	dbPainter.eraseRect(rect());
 
 	for (auto &&b : s) {
 		const auto &pos = b.get().pos();
@@ -139,4 +130,15 @@ void RenderArea::phys_loop() {
 	} catch(std::exception &ex) {
 		std::cerr << "couldn't perform physics loop: " << ex.what();
 	}
+}
+
+void RenderArea::add_ball(const vec2 &pos) {
+	auto id = s.add(pos);
+	colors[id] = {qRgb(10 * (rand() % 26), 10 * (rand() % 26), 10 * (rand() % 26))};
+}
+
+void RenderArea::remove_ball(const vec2 &pos) {
+	auto removed = s.remove(pos);
+	if (removed.has_value())
+		colors.erase(removed.value()-1);
 }
