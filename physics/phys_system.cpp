@@ -119,12 +119,14 @@ phys_system::cbw_iterator phys_system::find_in_pos(const vec2 &pos) const {
 
 uint64_t phys_system::ball_wrapper::guid_ = 1;
 
-
-void phys_system::remove(const vec2 &pos) {
+std::optional<uint64_t> phys_system::remove(const vec2 &pos) {
 	const auto target = find_in_pos(pos);
 
 	if (target == end())
-		return;
+		return std::nullopt;
+
+	auto id = target->id;
 
 	balls_.erase(target);
+	return id;
 }

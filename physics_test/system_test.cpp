@@ -126,7 +126,7 @@ namespace phys_system_test {
 
 			WHEN("clicking anywhere") {
 				for (auto &&v : positions)
-					s.remove(v);
+					REQUIRE(s.remove(v) == std::nullopt);
 				THEN("nothing changes")
 					REQUIRE(s.size() == 0);
 			}

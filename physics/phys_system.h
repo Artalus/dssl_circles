@@ -51,7 +51,7 @@ public:
 	~phys_system() = default;
 
 	uint64_t add(const vec2 &pos);
-	void remove(const vec2 &pos);
+	std::optional<uint64_t> remove(const vec2 &pos);
 	size_t size() const;
 
 	void simulate(std::chrono::milliseconds delta);
