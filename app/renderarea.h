@@ -1,15 +1,15 @@
 #pragma once
+#include <thread>
+#include <mutex>
 #include <QWidget>
 #include <QTimer>
 #include "../physics/phys_system.h"
-#include <thread>
-#include <mutex>
 
 
-class RenderArea : public QWidget
-{
-	Q_OBJECT
-	friend std::thread;
+class RenderArea : public QWidget {
+Q_OBJECT
+	const float scale_factor = 1;
+
 public:
 	RenderArea(QWidget *parent = nullptr);
 	~RenderArea();
@@ -24,14 +24,14 @@ protected:
 	void paintEvent(QPaintEvent *event) override;
 
 private:
-	QTimer timer;
-
-	const float scale_factor = 1;
 	vec2 RenderArea::get_click_pos(QPointF pos) const;
 	void phys_loop();
 	void add_ball(const vec2 &pos);
 	void remove_ball(const vec2 &pos);
+
+	QTimer timer;
 	phys_system s;
+
 	std::map<uint64_t, QPen> colors;
 
 	std::thread phys_thread;

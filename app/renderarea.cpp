@@ -81,7 +81,6 @@ void RenderArea::mouseReleaseEvent(QMouseEvent *event) {
 
 void RenderArea::paintEvent(QPaintEvent * /* event */)
 {
-	const static QBrush brush(Qt::GlobalColor::white);
 	std::lock_guard<std::mutex> g(system_mutex);
 	QPixmap doubleBuffer{this->size()};
 	QPainter painter(this);
@@ -125,7 +124,6 @@ void RenderArea::phys_loop() {
 				if ( actual_delta >= minimal_delta )
 					s.simulate(duration_cast<milliseconds>(actual_delta));
 			}
-			//std::this_thread::sleep_until(now + maximal_delta);
 		}
 	} catch(std::exception &ex) {
 		std::cerr << "couldn't perform physics loop: " << ex.what();
